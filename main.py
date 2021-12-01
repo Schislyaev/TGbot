@@ -55,9 +55,11 @@ def voice_processing(message):
             new_file.write(downloaded_file)
             print(f'{date_time()} *{message.chat.id}* Temp file saved')
             sleep(1)
-        write_audio(f'{message.chat.id}.ogg')
+        new_audio = write_audio(f'{message.chat.id}.ogg')
 
         clear_temp()
+
+        bot.send_document(message.chat.id, open(new_audio, 'rb'))
 
     except Exception as e:
         print(e)
@@ -74,6 +76,9 @@ def write_audio(src):
         sound = AudioSegment.from_ogg('tmp/' + src)
         sound.export(dst, format='wav', bitrate='16kHz')
         print(f'{date_time()} * Edited file saved')
+
+        return dst
+
     except Exception as e:
         print(e)
 
